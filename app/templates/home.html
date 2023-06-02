@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container py-4 mt-4">
+    <div class="p-5 mb-4 bg-light rounded-3 ">
+        <div class="container-fluid py-5">
+            <h1 class="display-5"><b>OpenCV</b> Image Stitching by <span class="badge bg-success p-2 mb-3">Flask</span></h1>
+            <p class="col-md-8 fs-4">Сшивание панорамных изображений с помощью OpenCV</p>
+        </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+        <h1>OpenCV-Image-Stitching</h1>
+        <p>Простой алгоритм сшивания изображений с использованием SIFT, гомографии, KNN и Ransac в Python.</p>
+        <p>Проект заключается в реализации алгоритма автоматического сшивания изображений на основе признаков. Когда мы вводим два изображения с перекрывающимися полями, мы ожидаем получить широкую бесшовную панораму.</p>
+        <p>Мы используем преобразование масштабно-инвариантных признаков (SIFT) для извлечения локальных особенностей входных изображений, алгоритмы K ближайших соседей для сопоставления этих признаков и консенсус случайных выборок (Ransac) для вычисления матрицы омографа, которая будет использоваться для деформации изображения. Наконец, мы применяем взвешенную матрицу в качестве маски для смешивания изображений.</p>
+        <a class="btn btn-primary" href="{{ url_for('test') }}">Попробывать</a>
+
+        <h2 class="mt-3">Примеры</h2>
+        <h3 class="mt-2 mb-2">Исходные изображения</h3>
+        <div class="d-flex w-100">
+            <img src="static/img/image0.jpeg" class="w-25">
+            <img src="static/img/image1.jpeg" class="w-25">
+        </div>
+        <h3 class="mt-2 mb-2">Сопоставление</h3>
+        <img src="static/img/matching.jpg" class="w-50">
+        <h3 class="mt-2 mb-2">Итоговое изображение</h3>
+        <img src="static/img/panorama.jpg" class="w-50">
+
+        <h2 class="mt-3">Другие примеры</h3>
+        <h3 class="mt-2 mb-2">Комната</h3>
+        <img src="static/img/room.jpg" class="w-50">
+    </div>
+
+</div>
+<div class="container">
+    <footer class="text-center">
+        <p class="mb-0">Made in <span style="color: red">♥</span> by Erilov Nikita</p>
+        <p>&copy; 2023 - <a class="gitLink" href="https://github.com/ErilovNikita/OpenCV-Image-Stitching">OpenCV-Image-Stitching <span class="AppVersion"></span></a></p>
+    </footer>
+</div>
+
+<script>
+    $('div.shadow').addClass('d-none')
+</script>
+{% endblock %}

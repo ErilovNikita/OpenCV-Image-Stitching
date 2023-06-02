@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container py-4 mt-4">
+    <a href="/">На главную</a>
+    <h1>Тестирование</h1>
+    <div class="row align-items-md-stretch">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Первое изображение</h5>
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="file1" onchange="previewFile('file1')">
+                    </div>
+                    <img id="file1-prew" class="d-none" src="" height="200" alt="Превью">
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Второе изображение</h5>
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="file2" onchange="previewFile('file2')">
+                    </div>
+                    <img id="file2-prew" class="d-none" src="" height="200" alt="Превью">
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Итоговое изображение</h5>
+                    <button id="gen" class="btn btn-success">Генерировать</button>
+
+                    <div class="matching d-none">
+                        <p>Трасировка</p>
+                        <img id="matching-prew" src="" class="w-100">
+                    </div>
+
+                    <div class="panorama d-none">
+                        <p>Результат</p>
+                        <img id="panorama-prew" src="" class="w-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="container">
+    <footer class="text-center">
+        <p class="mb-0">Made in <span style="color: red">♥</span> by Erilov Nikita</p>
+        <p>&copy; 2023 - <a class="gitLink" href="https://github.com/ErilovNikita/OpenCV-Image-Stitching">OpenCV-Image-Stitching <span class="AppVersion"></span></a></p>
+    </footer>
+</div>
+
+<script>
+    function previewFile(id) {
+        var preview = document.getElementById(id + '-prew')
+        var file    = document.getElementById(id).files[0];
+        var reader  = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.classList.remove('d-none')
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+    }
+
+    $( "#gen" ).on( "click", function() {
+        $( "#gen" )[0].innerHTML = 'Загрузка'
+        $( "#gen" )[0].disabled = true;
+        $( "#gen" )[0].classList.add('btn-primary')
+        $( "#gen" )[0].classList.remove('btn-success')
+
+        b1 = document.getElementById('file1-prew').src
+        b1 = b1.substring(b1.indexOf('base64,') + 7, b1.lenght )
+
+        b2 = document.getElementById('file2-prew').src
+        b2 = b2.substring(b2.indexOf('base64,') + 7, b2.lenght )
+
+        genParoram(
+            b1,
+            b2
+        ).then(function (results) {
+            data = JSON.parse(results)
+            $( "#gen" )[0].innerHTML = 'Повторить генирацию'
+            $( "#gen" )[0].classList.remove('btn-primary')
+            $( "#gen" )[0].classList.add('btn-success')
+            $( "#gen" )[0].disabled = false;
+
+            $( ".panorama" )[0].classList.remove('d-none')
+            $( ".matching" )[0].classList.remove('d-none')
+
+            $( "#panorama-prew" )[0].src = 'data:image;base64,' + data.panorama;
+            $( "#matching-prew" )[0].src = 'data:image;base64,' + data.matching;
+        })
+    });
+    
+</script>
+{% endblock %}
